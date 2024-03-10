@@ -1,0 +1,34 @@
+version: "3.5"
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    restart: on-failure  # 容器失败时重新启动
+    ports:
+      - 27017:27017  # 将宿主机的27017端口映射到容器的27017端口
+    environment:
+      TZ: Asia/Shanghai  # 设置容器时区为亚洲/上海
+      MONGO_INITDB_ROOT_USERNAME: admin  # MongoDB的初始用户名
+      MONGO_INITDB_ROOT_PASSWORD: 123456  # MongoDB的初始密码
+    volumes:
+      - /home/debian/mongoDB/data/db:/data/db  # 将本地目录映射到容器内部的MongoDB数据目录
+    logging:
+      driver: "json-file"  # 使用JSON文件作为日志驱动
+      options:
+        max-size: "200k"  # 设置日志文件的最大大小为200KB
+        max-file: "10"     # 设置日志文件的最大数量为10个
+
+#  mongo-express:
+#    image: mongo-express
+#    container_name: mongo-express
+#    ports:
+#      - 27018:8081  # 将宿主机的27018端口映射到容器的8081端口
+#    environment:
+#      ME_CONFIG_OPTIONS_EDITORTHEME: 3024-night  # 设置Mongo Express编辑器主题
+#      ME_CONFIG_MONGODB_SERVER: mongodb  # MongoDB服务器的主机名
+#      ME_CONFIG_MONGODB_ADMINUSERNAME: admin  # MongoDB管理员用户名
+#      ME_CONFIG_MONGODB_ADMINPASSWORD: 123456  # MongoDB管理员密码
+#      ME_CONFIG_BASICAUTH_USERNAME: admin  # Mongo Express基本身份验证用户名
+#      ME_CONFIG_BASICAUTH_PASSWORD: 123456  # Mongo Express基本身份验证密码
+#    depends_on:
+#      - mongodb  # 确保Mongo Express在MongoDB之后启动，以便正确连接到MongoDB
