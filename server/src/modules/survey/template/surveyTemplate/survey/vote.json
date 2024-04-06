@@ -27,29 +27,7 @@
         "checked": false,
         "minNum": "",
         "maxNum": "",
-        "options": [
-          {
-            "text": "选项1",
-            "imageUrl": "",
-            "others": false,
-            "mustOthers": false,
-            "othersKey": "",
-            "placeholderDesc": ""
-          },
-          {
-            "text": "选项2",
-            "imageUrl": "",
-            "others": false,
-            "mustOthers": false,
-            "othersKey": "",
-            "placeholderDesc": ""
-          }
-        ],
         "star": 5,
-        "nps": {
-          "leftText": "极不满意",
-          "rightText": "极满意"
-        },
         "exclude": false,
         "relTypes": {
           "textarea": "多行文本框",
@@ -105,10 +83,6 @@
             "hash": "115020"
           }
         ],
-        "nps": {
-          "leftText": "极不满意",
-          "rightText": "极满意"
-        },
         "star": 5,
         "addressType": 3,
         "textRange": {
@@ -143,9 +117,5 @@
     "endTime": "2028-05-25 10:22:23",
     "tLimit": "0",
     "language": "chinese"
-  },
-  "skinConf": {
-    "skinColor": "#4a4c5b",
-    "inputBgColor": "#ffffff"
   }
 }

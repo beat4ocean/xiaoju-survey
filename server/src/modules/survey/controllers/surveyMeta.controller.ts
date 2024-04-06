@@ -8,28 +8,44 @@ import {
   UseGuards,
   Request,
 } from '@nestjs/common';
+import * as Joi from 'joi';
+import moment from 'moment';
+import { ApiTags } from '@nestjs/swagger';
+
+import { getFilter, getOrder } from 'src/utils/surveyUtil';
+import { HttpException } from 'src/exceptions/httpException';
+import { EXCEPTION_CODE } from 'src/enums/exceptionCode';
+import { Authtication } from 'src/guards/authtication';
+import { Logger } from 'src/logger';
 
 import { SurveyMetaService } from '../services/surveyMeta.service';
 
-import * as Joi from 'joi';
-import { Authtication } from 'src/guards/authtication';
-import moment from 'moment';
-
-import { getFilter, getOrder } from 'src/utils/surveyUtil';
-
+@ApiTags('survey')
 @Controller('/api/survey')
 export class SurveyMetaController {
-  constructor(private readonly surveyMetaService: SurveyMetaService) {}
+  constructor(
+    private readonly surveyMetaService: SurveyMetaService,
+    private readonly logger: Logger,
+  ) {}
 
   @UseGuards(Authtication)
   @Post('/updateMeta')
   @HttpCode(200)
   async updateMeta(@Body() reqBody, @Request() req) {
-    const validationResult = await Joi.object({
-      remark: Joi.string().allow(null).default(''),
-      title: Joi.string().required(),
-      surveyId: Joi.string().required(),
-    }).validateAsync(reqBody, { allowUnknown: true });
+    let validationResult;
+    try {
+      validationResult = await Joi.object({
+        title: Joi.string().required(),
+        remark: Joi.string().allow(null, '').default(''),
+        surveyId: Joi.string().required(),
+      }).validateAsync(reqBody, { allowUnknown: true });
+    } catch (error) {
+      this.logger.error(`updateMeta_parameter error: ${error.message}`, {
+        req,
+      });
+      throw new HttpException('参数错误', EXCEPTION_CODE.PARAMETER_ERROR);
+    }
+
     const username = req.user.username;
     const surveyId = validationResult.surveyId;
     const survey = await this.surveyMetaService.checkSurveyAccess({
